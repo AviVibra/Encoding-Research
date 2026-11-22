@@ -1,4 +1,10 @@
+"""Addition problems, tokenizer and the fixed test sets.
+
+A problem looks like 12345+67890=080235 (answer always has n+1 digits).
+Run this file once to create test_sets.pt.
+"""
 import random
+
 import torch
 
 tokens = "0123456789+="
@@ -16,6 +22,7 @@ def decode(x):
 
 
 def pick_pair(rule):
+    """Pick two digits whose sum follows the rule for one column."""
     while True:
         da, db = random.randint(0, 9), random.randint(0, 9)
         s = da + db
@@ -69,6 +76,7 @@ def make_cascade(n):
 
 
 def to_xy(problems, n_digits):
+    """x = all tokens but the last, y = next tokens; loss only on the n+1 answer digits."""
     data = torch.tensor([encode(p) for p in problems])
     x = data[:, :-1]
     y = data[:, 1:].clone()
